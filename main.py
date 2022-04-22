@@ -62,22 +62,6 @@ def model60():
     model.add(MaxPooling2D(pool_size = 2))
     model.add(Dropout(0.2))
 
-    model.add(Conv2D(filters = 16, kernel_size = 3, padding = 'same', activation = 'relu'))
-    model.add(MaxPooling2D(pool_size = 2))
-    model.add(Dropout(0.2))
-              
-    model.add(Conv2D(filters = 32, kernel_size = 3, padding = 'same', activation = 'relu'))
-    model.add(MaxPooling2D(pool_size = 2))
-    model.add(Dropout(0.2))
-
-    model.add(Conv2D(filters = 64, kernel_size = 3, padding = 'same', activation = 'relu'))
-    model.add(MaxPooling2D(pool_size = 2))
-    model.add(Dropout(0.2))
-              
-    model.add(Conv2D(filters = 128, kernel_size = 3, padding = 'same', activation = 'relu'))
-    model.add(MaxPooling2D(pool_size = 3))
-    model.add(Dropout(0.2))
-
     model.add(Flatten())
     model.add(Dense(500, activation = 'relu'))
     model.add(Dropout(0.2))
@@ -88,13 +72,13 @@ def model60():
     
     return model
 
-# VERİ YÜKLEME VE ÖN İŞLEME
+# Veri yükleme ve ön işleme.
 # Dataframede "Path" isimli bir sütun açılır. Dataframede bulunan tüm resimlerin tam konumları ("C:/images/resim1.png" gibi) "Path" isimli sütuna kaydedilir.
-dataFrame = pd.read_csv("E:/Github/Akciger-Hastaliklari-Tespit-Sistemi/Data_Entry_2017.csv")
-imgPaths = {os.path.basename(x): x for x in glob("E:/Github/Akciger-Hastaliklari-Tespit-Sistemi/images/*.png")}
+dataFrame = pd.read_csv("E:/Akciger-Hastaliklari-Tespit-Sistemi/Data_Entry_2017.csv")
+imgPaths = {os.path.basename(x): x for x in glob("E:/Akciger-Hastaliklari-Tespit-Sistemi/images/*.png")}
 dataFrame['Path'] = dataFrame['Image Index'].map(imgPaths.get)
 
-# ONE HOT ENCODING: Target Vector oluşturmak için her bir hastalık sütun olarak açılıp 0 veya 1 ile değerlindirilir.
+# One Hot Encoding - Target Vector oluşturmak için her bir hastalık sütun olarak açılıp 0 veya 1 ile değerlindirilir.
 dummyLabels = ['Atelectasis', 'Consolidation', 'Infiltration', 'Pneumothorax', 'Edema', 'Emphysema', 'Fibrosis', 'Effusion', 'Pneumonia', 'Pleural_Thickening', 'Cardiomegaly', 'Nodule', 'Mass', 'Hernia']
 for label in dummyLabels:
     dataFrame[label] = dataFrame['Finding Labels'].map(lambda result: 1.0 if label in result else 0)
